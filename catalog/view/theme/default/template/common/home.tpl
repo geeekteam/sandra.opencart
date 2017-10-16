@@ -25,7 +25,7 @@
                                     <ul class="filter-list jqs-filter">
                                         <?php foreach ($filters['filter'] as $filter) : ?>
                                             <li class="filter-list__item">
-                                                <a class="filter-list__item-link" href="#"><?=$filter['name'] ?></a>
+                                                <a class="filter-list__item-link" href="/all&filter=<?php echo $filter['filter_id'];?>"><?=$filter['name'] ?></a>
                                             </li>
                                         <?php endforeach; ?>
                                     </ul>
