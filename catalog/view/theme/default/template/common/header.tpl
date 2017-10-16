@@ -14,15 +14,14 @@
     <title><?php echo $title; ?></title>
 </head>
 
-<link href="/catalog/view/javascript/owl.carousel/dist/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/catalog/view/javascript/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
 <link href="/catalog/view/theme/default/stylesheet/common.css" rel="stylesheet">
 <link href="/catalog/view/theme/default/stylesheet/vendor.css" rel="stylesheet">
 
-
-<script src="/catalog/view/javascript/jquery/dist/jquery.min.js" type="text/javascript"></script>
-<script src="/catalog/view/javascript/owl.carousel/dist/owl.carousel.min.js" type="text/javascript"></script>
-<script src="/catalog/view/javascript/jcf/dist/js/jcf.js" type="text/javascript"></script>
-<script src="/catalog/view/javascript/jcf/dist/js/jcf.select.js" type="text/javascript"></script>
+<script src="/catalog/view/javascript/jquery.min.js" type="text/javascript"></script>
+<script src="/catalog/view/javascript/owl.carousel/js/owl.carousel.min.js" type="text/javascript"></script>
+<script src="/catalog/view/javascript/jcf/js/jcf.js" type="text/javascript"></script>
+<script src="/catalog/view/javascript/jcf/js/jcf.select.js" type="text/javascript"></script>
 
 <body>
 

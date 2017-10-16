@@ -21,53 +21,45 @@ $special_product = null;
     if ($special_product != null) break;
 endforeach; ?>
 
-<section class="main-screen">
-    <div class="main-screen-cont">
-        <div class="container group">
-            <div class="main-screen-tt-cont">
-                <span class="main-screen-tt">лучшие ugg в москве</span>
-                <span class="main-screen-ic"><i class="icon icon-uggy"></i></span>
-                <div class="main-screen-sale"><span>Скидка <span>более 50%</span></span> ТОЛЬКО ДО <span
-                        class="js-future-date">...</span></div>
+<div class="main-banner" style="background-image: url('../images/main-banner.jpg');">
+    <div class="container">
+        <div class="top-product">
+            <div class="top-product__image-wrapper">
+                <img class="top-product__image" src="<?=($special_product['thumb']); ?>" alt="<?=($product['name']); ?>">
             </div>
-            <form class="main-screen-product">
-                <input type="hidden" name="product_id" value="<?=$special_product['product_id']; ?>">
-                <span class="img-main-screen-product">
-                            <img src="<?=($special_product['thumb']); ?>" alt="<?=($product['name']); ?>">
-                    <?php
-                    $discount_price = intval(str_replace(',', '', $special_product['product_special_price']));
-                    $old_price = intval(str_replace(',', '', $special_product['product_price']))
-                    ?>
-                    <span><?=intval(100-($discount_price*100)/$old_price);?>%</span>
-                        </span>
-                <div class="main-screen-product-cont">
-                    <span class="tt-main-screen-product-cont"><?=$special_product['name'];?></span>
-                    <?php if($product['special']): ?>
-                        <span class="price-main-screen-product"><span><?=$special_product['product_special_price'];?></span> руб.</span>
-                    <?php else: ?>
-                        <span class="price-main-screen-product"><span><?=$special_product['product_price'];?></span> руб.</span>
-                    <?php endif; ?>
-                    <div class="size-main-screen-product">
-                        <span>Размер (RUS)</span>
-                        <?php foreach($special_product['options'] as $option): ?>
-                            <?php if ($option['option_id'] == 14): ?>
-                                <div>
-                                    <?php $i = 1; foreach($option['product_option_value'] as $sizes): ?>
-                                        <label class="js-size-label size-label js-btn-buy">
-                                            <input class="js-size" type="radio" name="<?=$option['product_option_id']?>" value="<?=$sizes['product_option_value_id']?>" data-size="<?php echo $sizes['name']; ?>" id="mSize<?=$i;?>">
-                                            <a><?=($sizes['name']);?></a>
-                                        </label>
-                                        <?php $i++; endforeach;?>
+            <div class="top-product__buying product-buying">
+                <div class="product-buying__name"><?=$special_product['name'];?></div>
+                <?php foreach($special_product['options'] as $options): ?>
+                    <?php if ($options['name'] == 'Объём') : ?>
+                        <?php foreach ($options['product_option_value'] as $volume) : ?>
+                            <div class="product-buying__option">
+                                <div class="product-buying__option-name">
+                                    <span class="fw-font-bold"><?=round($volume['price']); ?> тг.</span>
+                                    <span class="fw-fz-14">Объём: <?=$volume['name']; ?></span>
                                 </div>
-                            <?php endif;?>
-                        <?php endforeach;?>
-                    </div>
-                    <a href="#" class="btn btn-lg btn-icon js-btn-buy js-btn-loading">
-                        <span>купить сейчас</span>
-                        <i class="icon"> › </i>
-                    </a>
+                                <div class="product-buying__option-count">
+                                    <div class="fw-flex jqs-product-count">
+                                        <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                        <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                                        <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                                    </div>
+                                    <span class="fw-color-white fw-fz-14">В наличии</span>
+                                </div>
+                                <div class="btn btn__in-cart">
+                                    <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
+                                    <span>В корзину</span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+            <div class="main-banner__slogan">
+                <h1 class="main-banner__slogan-title"><b>Лучшие духи 2017</b></h1>
+                <div class="main-banner-icon">
+                    <img class="main-banner-icon__parfume svg svg_white" src="images/icon-parfume.svg" alt="">
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-</section>
+</div>

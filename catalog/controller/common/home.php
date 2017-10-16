@@ -16,6 +16,22 @@ class ControllerCommonHome extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
+        // Категории
+        $this->load->model('catalog/category');
+
+        $data['categories'] = $this->model_catalog_category->getCategories(83);
+        $data['filter_groups'] = $this->model_catalog_category->getCategoryFilters(83);
+        $data['all_categories'] = array();
+
+        foreach ($data['categories'] as $category):
+            $data['all_categories'][] = array(
+                'category_href' => $this->url->link('product/category', 'path=' . $category['category_id']),
+                'category_name' => $category['name'],
+                'sort_order' => $category['sort_order']
+            );
+        endforeach;
+        //Конец категорий
+
 		$this->response->setOutput($this->load->view('common/home', $data));
 
 
