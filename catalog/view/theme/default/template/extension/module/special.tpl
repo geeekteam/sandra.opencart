@@ -51,6 +51,23 @@ endforeach; ?>
                                 </div>
                             </div>
                         <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="product-buying__option">
+                            <div class="product-buying__option-name">
+                                <span class="fw-font-bold"><?=$special_product['price']; ?> <span class="fw-fz-24">тг.</span></span>
+                            </div>
+                            <div class="product-buying__option-count">
+                                <div class="fw-flex jqs-product-count">
+                                    <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                    <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                                    <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                                </div>
+                            </div>
+                            <div class="btn btn__in-cart">
+                                <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt=""></div>
+                                <span>В корзину</span>
+                            </div>
+                        </div>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>

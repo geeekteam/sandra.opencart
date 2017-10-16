@@ -5,11 +5,16 @@ $special_price = str_replace(' ', ',', str_replace(('.00 р.'), '', $special));
 $default_price = str_replace(' ', '', str_replace(('.00 р.'), '', $price));
 $economy_sum = $default_price - $special_price;
 
+$discount_price = intval(str_replace(',', '', $special_price));
+$old_price = intval($default_price);
+
+$i=0;
 foreach($options as $option):
-    if($option['option_id'] == 13):
-        if (!empty(($option['value']))):
-            $discount = $option['value'];
-        endif;
+    if($option['name'] == 'Объём'):
+        foreach ($option['product_option_value'] as $options):
+            $volumes[$i] = $options;
+            $i++;
+        endforeach;
     endif;
 endforeach;
 
@@ -23,25 +28,25 @@ echo $header;
             <div class="product-page-triggers">
                 <div class="product-page__trigger">
                     <div class="product-page__trigger-icon">
-                        <i class="icon-original-product"></i>
+                        <img src="images/icon-tick.svg">
                     </div>
                     <p class="product-page__trigger-text">Только оригинальная продукция</p>
                 </div>
                 <div class="product-page__trigger">
                     <div class="product-page__trigger-icon">
-                        <i class="icon-direct-deliveries"></i>
+                        <img src="images/icon-box.svg">
                     </div>
                     <p class="product-page__trigger-text">Прямые поставки от производителей</p>
                 </div>
                 <div class="product-page__trigger">
                     <div class="product-page__trigger-icon">
-                        <i class="icon-payment"></i>
+                        <img src="images/icon-money.svg">
                     </div>
                     <p class="product-page__trigger-text">Оплата при получении или самовывоз</p>
                 </div>
                 <div class="product-page__trigger">
                     <div class="product-page__trigger-icon">
-                        <i class="icon-refund"></i>
+                        <img src="images/icon-return.svg">
                     </div>
                     <p class="product-page__trigger-text">Возврат в течение 2 недель</p>
                 </div>
@@ -60,117 +65,89 @@ echo $header;
                     <a href="#" class="breadcrumbs__item-link">Парфюмированные наборы</a>
                 </li>
             </ul>
-            <h1 class="product-content__name">Духи Shalimar</h1>
+            <h1 class="product-content__name"><?=$heading_title; ?></h1>
             <form class="product-form">
+                <input type="hidden" name="product_id" value="<?=$product_id; ?>">
                 <div class="product-images">
                     <div class="product-images__main owl-product-images-main owl-carousel">
                         <div class="product-images__image-wrapper">
-                            <img class="product-images__image" src="images/product-1.png" alt="">
-                            <span class="product-item-sale">10%</span>
+                            <img class="product-images__image" src="<?php echo $thumb; ?>" alt="<?=$heading_title; ?>">
+                            <?php if ($discount_price > 0) : ?>
+                                <span class="product-item-sale"><?=intval(100-($discount_price*100)/$old_price);?>%</span>
+                            <?php endif; ?>
                         </div>
-                        <div class="product-images__image-wrapper">
-                            <img class="product-images__image" src="images/product-2.png" alt="">
-                            <span class="product-item-sale">10%</span>
-                        </div>
-                        <div class="product-images__image-wrapper">
-                            <img class="product-images__image" src="images/product-1.png" alt="">
-                            <span class="product-item-sale">10%</span>
-                        </div>
+                        <?php foreach ($images as $image) : ?>
+                            <div class="product-images__image-wrapper">
+                                <img class="product-images__image" src="<?=$image['thumb']; ?>" alt="<?=$heading_title; ?>">
+                                <?php if ($discount_price > 0) : ?>
+                                    <span class="product-item-sale"><?=intval(100-($discount_price*100)/$old_price);?>%</span>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                     <div class="product-images__thumbs owl-product-images-thumbs owl-carousel">
-                        <div class="product-images__thumb-wrapper">
-                            <img class="product-images__thumb" src="images/product-1.png" alt="">
-                        </div>
-                        <div class="product-images__thumb-wrapper">
-                            <img class="product-images__thumb" src="images/product-2.png" alt="">
-                        </div>
-                        <div class="product-images__thumb-wrapper">
-                            <img class="product-images__thumb" src="images/product-1.png" alt="">
-                        </div>
+                        <?php foreach ($images as $image) : ?>
+                            <div class="product-images__thumb-wrapper">
+                                <img class="product-images__thumb" src="<?=$image['thumb']; ?>" alt="">
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 <div class="product-buying-wrapper">
                     <p class="product__stock-date">Акция действует до 01.12</p>
-                    <div class="product__stock-count"><span class="fw-mr-10"><i class="icon-check-green"></i></span>Осталось 13 штук по акции</div>
-
-                    <div class="product__buying product-buying">
-                        <div class="product-buying__name">Montale Aoud Lagoon</div>
-                        <div class="product-buying__option">
-                            <div class="product-buying__option-name">
-                                <span class="fw-font-bold fw-color-orange">3500 руб.</span>
-                                <span class="fw-fz-14 fw-color-black">Объём: 20 мл</span>
-                            </div>
-                            <div class="product-buying__option-count">
-                                <div class="fw-flex jqs-product-count">
-                                    <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                    <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                                    <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                                </div>
-                                <span class="fw-color-black fw-fz-14">В наличии</span>
-                            </div>
-                            <div class="btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
+                    <div class="product__stock-count">
+                        <div class="icon-check">
+                            <img class="icon-check__icon svg svg_green" src="../images/icon-check.svg" alt="">
                         </div>
-
-                        <div class="product-buying__option">
-                            <div class="product-buying__option-name">
-                                <span class="fw-font-bold fw-color-orange">3500 руб.</span>
-                                <span class="fw-fz-14 fw-color-black">Объём: 20 мл</span>
-                            </div>
-                            <div class="product-buying__option-count">
-                                <div class="fw-flex jqs-product-count">
-                                    <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                    <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                                    <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                                </div>
-                                <span class="fw-color-black fw-fz-14">В наличии</span>
-                            </div>
-                            <div class="btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-
-                        <div class="product-buying__option">
-                            <div class="product-buying__option-name">
-                                <span class="fw-font-bold fw-color-orange">3500 руб.</span>
-                                <span class="fw-fz-14 fw-color-black">Объём: 20 мл</span>
-                            </div>
-                            <div class="product-buying__option-count">
-                                <div class="fw-flex jqs-product-count">
-                                    <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                    <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                                    <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                                </div>
-                                <span class="fw-color-black fw-fz-14">В наличии</span>
-                            </div>
-                            <div class="btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-
-                        <div class="product-buying__option">
-                            <div class="product-buying__option-name">
-                                <span class="fw-font-bold fw-color-orange">3500 руб.</span>
-                                <span class="fw-fz-14 fw-color-black">Объём: 20 мл</span>
-                            </div>
-                            <div class="product-buying__option-count">
-                                <div class="fw-flex jqs-product-count">
-                                    <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                    <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                                    <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                                </div>
-                                <span class="fw-color-black fw-fz-14">Нет в наличии</span>
-                            </div>
-                            <div class="btn btn__sold">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>Распродано</span>
-                            </div>
-                        </div>
+                        <span>Осталось 13 штук по акции</span>
                     </div>
+                    <?php if (count($volumes)>0) : ?>
+                    <div class="product__buying product-buying">
+                        <div class="product-buying__name"><?=$heading_title; ?></div>
+
+                        <?php foreach($volumes as $volume): ?>
+                            <?php $volume_price = str_replace(' ', '', str_replace(('.00 р.'), '', $volume['price'])); ?>
+                            <div class="product-buying__option">
+                                <div class="product-buying__option-name">
+                                    <span class="fw-font-bold fw-color-orange"><?=($volume_price); ?> тг.</span>
+                                    <span class="fw-fz-14">Объём: <?=$volume['name']; ?></span>
+                                </div>
+                                <div class="product-buying__option-count">
+                                    <div class="fw-flex jqs-product-count">
+                                        <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                        <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                                        <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                                    </div>
+                                    <span class="fw-color-white fw-fz-14">В наличии</span>
+                                </div>
+                                <div class="btn btn__in-cart">
+                                    <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
+                                    <span>В корзину</span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php else: ?>
+                        <div class="product__buying product-buying top-product__buying_without-volume">
+                            <div class="product-buying__name"><?=$heading_title; ?></div>
+                            <div class="product-buying__option">
+                                <div class="product-buying__option-name">
+                                    <span class="fw-font-bold fw-color-orange"><?=$default_price; ?> <span class="fw-fz-24">тг.</span></span>
+                                </div>
+                                <div class="product-buying__option-count">
+                                    <div class="fw-flex jqs-product-count">
+                                        <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                        <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                                        <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                                    </div>
+                                </div>
+                                <div class="btn btn__in-cart">
+                                    <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt=""></div>
+                                    <span>В корзину</span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
             </form>
@@ -193,7 +170,7 @@ echo $header;
 
                     <ul class="product-info-switcher-descr" data-switcher-target="product-info">
                         <li class="product-info-switcher-descr__text">
-                            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                            <?=$description;?>
                         </li>
                         <li class="product-info-switcher-descr__text">
                             <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
