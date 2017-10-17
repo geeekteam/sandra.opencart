@@ -18,6 +18,10 @@ foreach($options as $option):
     endif;
 endforeach;
 
+if (count($volumes) > 0) :
+    asort($volumes);
+endif;
+
 echo $header;
 ?>
 
@@ -260,7 +264,7 @@ echo $header;
                 <div class="fw-mb-40 fw-flex fw-flex-bottom@m fw-flex-column@xs fw-flex-row@m fw-flex-top@xs">
                     <h2 class="fw-fz-30@m fw-fz18@xs fw-text-uppercase fw-mt-0 fw-mb-0 fw-line-height-1">Вы смотрели</h2>
                 </div>
-                <div class="product-list-wrapper">
+                <div class="product-list-wrapper fw-pb-40">
                     <div class="product__wrapper">
                         <div class="product">
                             <a class="product__link" href="#">
