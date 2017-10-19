@@ -101,7 +101,164 @@
             <li class="mobile-menu__item"><a class="mobile-menu__item-link" href="#">Нишевый парфюм</a></li>
         </ul>
     </div>
+</div>
 
+<div class="popup-wrapper js-popup" data-popup="cart">
+    <form class="cart">
+        <div class="cart-triggers-wrapper">
+            <div class="cart-triggers">
+                <div class="cart-trigger">
+                    <div class="cart-trigger__icon">
+                        <img src="images/icon-tick.svg">
+                    </div>
+                    <p class="cart-trigger__text">Только оригинальная продукция</p>
+                </div>
+
+                <div class="cart-trigger">
+                    <div class="cart-trigger__icon">
+                        <img src="images/icon-box.svg">
+                    </div>
+                    <p class="cart-trigger__text">Прямые поставки от производителей</p>
+                </div>
+                <div class="cart-trigger">
+                    <div class="cart-trigger__icon">
+                        <img src="images/icon-money.svg">
+                    </div>
+                    <p class="cart-trigger__text">Оплата при получении или самовывоз</p>
+                </div>
+                <div class="cart-trigger">
+                    <div class="cart-trigger__icon">
+                        <img src="images/icon-return.svg">
+                    </div>
+                    <p class="cart-trigger__text">Возврат в течение 2 недель</p>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="cart__title">Ваш заказ</h2>
+        <div class="cart__table">
+            <div class="cart-table-header">
+                <div class="cart-table-header__cell">
+                    <p class="fw-fz-14 fw-mt-0 fw-mb-0">Фото</p>
+                </div>
+                <div class="cart-table-header__cell">
+                    <p class="fw-fz-14 fw-mt-0 fw-mb-0">Название</p>
+                </div>
+                <div class="cart-table-header__cell">
+                    <p class="fw-fz-14 fw-mt-0 fw-mb-0">Объём</p>
+                </div>
+                <div class="cart-table-header__cell">
+                    <p class="fw-fz-14 fw-mt-0 fw-mb-0">Количество</p>
+                </div>
+                <div class="cart-table-header__cell">
+                    <p class="fw-fz-14 fw-mt-0 fw-mb-0">Цена</p>
+                </div>
+            </div>
+            <div>
+                <div class="cart-table-body">
+                    <div class="cart-table-body__cell">
+                        <div class="cart-table-body__image-wrapper">
+                            <img src="images/product-1.png" alt="" class="cart-table-body__image">
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <p class="fw-fz-14 fw-text-uppercase fw-mt-0 fw-mb-0">Духи Shalimar</p>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="volume-select">
+                            <select>
+                                <option value="10" selected>10 мл</option>
+                                <option value="20" selected>20 мл</option>
+                                <option value="30" selected>30 мл</option>
+                                <option value="40" selected>40 мл</option>
+                                <option value="50" selected>50 мл</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="fw-flex jqs-product-count">
+                            <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                            <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                            <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="fw-fz-14">
+                            <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
+                            <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart-table-body">
+                    <div class="cart-table-body__cell">
+                        <div class="cart-table-body__image-wrapper">
+                            <img src="images/product-1.png" alt="" class="cart-table-body__image">
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <p class="fw-fz-14 fw-text-uppercase fw-mt-0 fw-mb-0">Духи Shalimar</p>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="volume-select">
+                            <select>
+                                <option value="10" selected>10 мл</option>
+                                <option value="20" selected>20 мл</option>
+                                <option value="30" selected>30 мл</option>
+                                <option value="40" selected>40 мл</option>
+                                <option value="50" selected>50 мл</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="fw-flex jqs-product-count">
+                            <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                            <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                            <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                        </div>
+                    </div>
+                    <div class="cart-table-body__cell">
+                        <div class="fw-fz-14">
+                            <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
+                            <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart__delivery">
+                <div class="cart__delivery-text">Доставка:</div>
+                <label class="cart-delivery__radio">
+                    <input type="radio" name="cart-delivery">
+                    <span class="radio"></span>
+                    <span class="fw-fz-14">Самовывоз</span>
+                </label>
+                <label class="cart-delivery__radio">
+                    <input type="radio" name="cart-delivery">
+                    <span class="radio"></span>
+                    <span class="fw-fz-14">Доставка</span>
+                </label>
+            </div>
+
+            <div class="cart__total">
+                <span class="fw-fz-14 fw-mr-15">Итого:</span>
+                <span class="fw-color-orange fw-fz-24 fw-font-bold">3500</span>
+                <span class="fw-fz-14">тг</span>
+            </div>
+            <div class="cart__contacts">
+                <div class="cart__contacts-item"><input class="cart__contacts-item-input" type="text" placeholder="Ваше имя"></div>
+                <div class="cart__contacts-item"><input class="cart__contacts-item-input" type="text" placeholder="Ваш телефон"></div>
+                <div class="cart__contacts-item"><button class="cart__btn btn">Оформить заказ</button></div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="popup-wrapper js-popup" data-popup="feedback">
+    <form class="feedback">
+        <p class="fw-mt-0 fw-mb-20 fw-fz-24">Обратный звонок</p>
+        <div class="feedback__row"><input class="feedback__input" type="text" placeholder="Ваше имя"></div>
+        <div class="feedback__row"><input class="feedback__input" type="text" placeholder="Ваш телефон"></div>
+        <div class="feedback__row"><button class="feedback__btn btn">Оформить заказ</button></div>
+    </form>
 </div>
 
 <script src="/catalog/view/javascript/common.js" type="text/javascript"></script>

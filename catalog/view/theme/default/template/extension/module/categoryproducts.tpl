@@ -4,13 +4,26 @@
         <a class="fw-ml-25@m fw-ml-0@xs fw-mt-0@m fw-mt-15@xs fw-color-orange fw-text-lowercase fw-fz-18@m fw-fz-14@xs fw-link-without-underline" href="<?=$category_href;?>">Смотреть все</a>
     </div>
     <div class="product-list-wrapper">
-        <?php foreach ($products as $product):
-        $options = $product['options'];
-        $product_name = $product['name'];
-        $product_price = str_replace(' ', ',',(str_replace('.00 р.', '', $product['price'])));
-        if ($product['special']) {
-            $product_special_price = str_replace(' ', ',' ,(str_replace('.00 р.', '', $product['special'])));
-        };?>
+        <?php foreach ($products as $product): ?>
+            <?php
+                $options = $product['options'];
+                $product_name = $product['name'];
+                $product_price = str_replace(' ', ',',(str_replace('.00 р.', '', $product['price'])));
+                if ($product['special']) {
+                    $product_special_price = str_replace(' ', ',' ,(str_replace('.00 р.', '', $product['special'])));
+                };
+
+                $i=0;
+                foreach ($product['options'] as $options) :
+                    if($options['name'] == 'Объём'):
+                        foreach ($options['product_option_value'] as $option):
+                            $volumes[$i] = $option;
+                            $i++;
+                        endforeach;
+                        asort($volumes);
+                    endif;
+                endforeach;
+            ?>
             <div class="product__wrapper">
                 <div class="product">
                     <a class="product__link" href="<?=$product['href'];?>">
@@ -26,6 +39,18 @@
                             </div>
                         </div>
                     </a>
+                    <?php if (count($volumes) > 0) : ?>
+                        <ul class="product__options">
+                            <?php foreach ($volumes as $volume) : ?>
+                                <li class="product__options-item">
+                                    <label class="product__options-item-radio">
+                                        <input type="radio" name="product-volume-<?=$product['product_id'];?>">
+                                        <span><?=$volume['name'] ?></span>
+                                    </label>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
                     <div class="product__button btn btn__in-cart js-open-popup" data-popup-target="cart">
                         <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt=""></div>
                         <span>В корзину</span>
