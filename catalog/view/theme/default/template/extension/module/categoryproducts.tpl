@@ -8,10 +8,11 @@
             <?php
                 $options = $product['options'];
                 $product_name = $product['name'];
-                $product_price = str_replace(' ', ',',(str_replace('.00 р.', '', $product['price'])));
+                $product_price = intval(str_replace(' ', '',(str_replace('.00 р.', '', $product['price']))));
                 if ($product['special']) {
-                    $product_special_price = str_replace(' ', ',' ,(str_replace('.00 р.', '', $product['special'])));
+                    $product_special_price = intval(str_replace(' ', '' ,(str_replace('.00 р.', '', $product['special']))));
                 };
+                $discount = intval(100-($product_special_price * 100 / $product_price));
 
                 $i=0;
                 foreach ($product['options'] as $options) :
@@ -24,18 +25,26 @@
                     endif;
                 endforeach;
             ?>
+
             <div class="product__wrapper">
-                <div class="product">
+                <form action="#" class="product">
+                    <input type="hidden" name="product_id" value="<?=$product['product_id']; ?>">
                     <a class="product__link" href="<?=$product['href'];?>">
-                        <div class="product__discount">10%</div>
+                        <?php if ($product['special']) : ?>
+                            <div class="product__discount"><?php echo $discount; ?>%</div>
+                        <?php endif; ?>
                         <div class="product__image-wrapper">
                             <img class="product__image" src="<?=$product['thumb'];?>" alt="">
                         </div>
                         <div class="fw-fz-16 fw-text-center"><?=$product['name'];?></div>
                         <div class="product__price">
                             <div class="fw-fz-14">
-                                <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
+                                <?php if ($product['special']) : ?>
+                                    <span class="fw-fz-24 fw-color-orange fw-font-bold"><?php echo $product_price ?></span> тг. /
+                                    <span class="fw-fz-18 fw-font-bold fw-text-line-through"><?php echo $product_special_price ?></span>
+                                <?php else : ?>
+                                    <span class="fw-fz-24 fw-color-orange fw-font-bold"><?php echo $product_price ?></span> тг.
+                                <?php endif; ?>
                             </div>
                         </div>
                     </a>
@@ -51,11 +60,11 @@
                             <?php endforeach; ?>
                         </ul>
                     <?php endif; ?>
-                    <div class="product__button btn btn__in-cart js-open-popup" data-popup-target="cart">
+                    <div class="product__button btn btn__in-cart js-open-popup js-btn-buy js-btn-loading" data-popup-target="cart">
                         <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt=""></div>
                         <span>В корзину</span>
                     </div>
-                </div>
+                </form>
             </div>
         <?php endforeach; ?>
     </div>

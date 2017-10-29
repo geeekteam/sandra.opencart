@@ -104,7 +104,7 @@
 </div>
 
 <div class="popup-wrapper js-popup" data-popup="cart">
-    <form class="cart">
+    <form class="cart jqs-send-form">
         <div class="cart-triggers-wrapper">
             <div class="cart-triggers">
                 <div class="cart-trigger">
@@ -154,75 +154,56 @@
                     <p class="fw-fz-14 fw-mt-0 fw-mb-0">Цена</p>
                 </div>
             </div>
-            <div>
-                <div class="cart-table-body">
-                    <div class="cart-table-body__cell">
-                        <div class="cart-table-body__image-wrapper">
-                            <img src="images/product-1.png" alt="" class="cart-table-body__image">
+            <div class="js-prod-cart-table">
+                <?php foreach($cart as $cartItem) : ?>
+                    <div class="cart-table-body js-prod-cart-item" data-cart-id="<?=$cartItem['cart_id']?>">
+                        <input class="js-product-id" type="hidden" name="products[<?=$cartItem['product_id']; ?>][product_id]" value="<?=$cartItem['product_id']; ?>">
+                        <input type="hidden" name="products[<?=$cartItem['product_id']; ?>][product_name]" value="<?=$cartItem['name']; ?>">
+                        <input class="js-hidden-input-item-price" type="hidden" name="products[<?=$cartItem['product_id']; ?>][product_price]" value="<?=$cartItem['price']; ?>">
+                        <input type="hidden" class="js-hidden-input-product-size" name="products[<?=$cartItem['product_id']; ?>][product_size]">
+                        <input type="hidden" class="js-hidden-input-give-some" name="products[<?=$cartItem['product_id']; ?>][give_some]">
+                        <input type="hidden" class="js-hidden-input-product-quantity" value="<?=$product_quantity;?>">
+                        <div class="cart-table-body__cell">
+                            <div class="cart-table-body__image-wrapper">
+                                <img src="/image/<?=$cartItem['image']; ?>" alt="" class="cart-table-body__image">
+                            </div>
+                        </div>
+                        <div class="cart-table-body__cell">
+                            <p class="fw-fz-14 fw-text-uppercase fw-mt-0 fw-mb-0"><?=$cartItem['name']; ?></p>
+                        </div>
+                        <div class="cart-table-body__cell">
+                            <div class="volume-select">
+                                <select>
+                                    <?php foreach($cartItem['options'] as $option) : ?>
+                                        <?php if($option['option_id'] == 14) : ?>
+                                            <?php foreach($option['product_option_value'] as $optionValue) : ?>
+                                                <?php if(isset($cartItem['option'][0]['product_option_value_id'])): ?>
+                                                    <?php $selectedOption = ($optionValue['product_option_value_id'] ==  $cartItem['option'][0]['product_option_value_id']) ? 'selected' : '';?>
+                                                    <option value="<?=$optionValue['product_option_value_id']; ?>" <?=$selectedOption;?>><?=$optionValue['name']; ?> </option>
+                                                <?php else: ?>
+                                                    <?php $selectedOption = ''; ?>
+                                                <?php endif; ?>
+                                                <option value="<?=$optionValue['product_option_value_id']; ?>"><?=$optionValue['name']; ?> </option>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cart-table-body__cell">
+                            <div class="fw-flex jqs-product-count">
+                                <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                <input class="js-item-count product-buying__count jqs-product-count-input" name="products[<?=$cartItem['product_id']; ?>][product_quantity]" value="<?=$cartItem['quantity'];?>">
+                                <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                            </div>
+                        </div>
+                        <div class="cart-table-body__cell">
+                            <div class="fw-fz-14">
+                                <span class="fw-fz-24 fw-color-orange fw-font-bold js-item-price"><?=$cartItem['total'];?></span> тг.
+                            </div>
                         </div>
                     </div>
-                    <div class="cart-table-body__cell">
-                        <p class="fw-fz-14 fw-text-uppercase fw-mt-0 fw-mb-0">Духи Shalimar</p>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="volume-select">
-                            <select>
-                                <option value="10" selected>10 мл</option>
-                                <option value="20" selected>20 мл</option>
-                                <option value="30" selected>30 мл</option>
-                                <option value="40" selected>40 мл</option>
-                                <option value="50" selected>50 мл</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="fw-flex jqs-product-count">
-                            <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                            <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                            <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                        </div>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="fw-fz-14">
-                            <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                            <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart-table-body">
-                    <div class="cart-table-body__cell">
-                        <div class="cart-table-body__image-wrapper">
-                            <img src="images/product-1.png" alt="" class="cart-table-body__image">
-                        </div>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <p class="fw-fz-14 fw-text-uppercase fw-mt-0 fw-mb-0">Духи Shalimar</p>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="volume-select">
-                            <select>
-                                <option value="10" selected>10 мл</option>
-                                <option value="20" selected>20 мл</option>
-                                <option value="30" selected>30 мл</option>
-                                <option value="40" selected>40 мл</option>
-                                <option value="50" selected>50 мл</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="fw-flex jqs-product-count">
-                            <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                            <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                            <span class="product-buying__count-plus jqs-product-count-plus">+</span>
-                        </div>
-                    </div>
-                    <div class="cart-table-body__cell">
-                        <div class="fw-fz-14">
-                            <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                            <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
             <div class="cart__delivery">
                 <div class="cart__delivery-text">Доставка:</div>
@@ -240,13 +221,13 @@
 
             <div class="cart__total">
                 <span class="fw-fz-14 fw-mr-15">Итого:</span>
-                <span class="fw-color-orange fw-fz-24 fw-font-bold">3500</span>
+                <span class="fw-color-orange fw-fz-24 fw-font-bold js-total-price"></span>
                 <span class="fw-fz-14">тг</span>
             </div>
             <div class="cart__contacts">
-                <div class="cart__contacts-item"><input class="cart__contacts-item-input" type="text" placeholder="Ваше имя"></div>
-                <div class="cart__contacts-item"><input class="cart__contacts-item-input" type="text" placeholder="Ваш телефон"></div>
-                <div class="cart__contacts-item"><button class="cart__btn btn">Оформить заказ</button></div>
+                <div class="cart__contacts-item"><input id="input-name" class="cart__contacts-item-input" type="text" placeholder="Ваше имя"></div>
+                <div class="cart__contacts-item"><input id="input-phone" class="mask-phone cart__contacts-item-input" type="text" placeholder="Ваш телефон"></div>
+                <div class="cart__contacts-item"><button type="submit" class="cart__btn btn">Оформить заказ</button></div>
             </div>
         </div>
     </form>
@@ -263,3 +244,4 @@
 
 <script src="/catalog/view/javascript/common.js" type="text/javascript"></script>
 <script src="/catalog/view/javascript/vendor.js" type="text/javascript"></script>
+<script src="/catalog/view/javascript/custom.js" type="text/javascript"></script>

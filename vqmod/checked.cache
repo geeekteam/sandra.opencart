@@ -387,3 +387,5 @@ admin\view\template\extension\module\store.tpl
 admin\controller\extension\module\bestseller.php
 admin\view\template\extension\module\bestseller.tpl
 admin\view\template\catalog\option_list.tpl
+catalog\controller\checkout\cart.php
+system\storage\modification\catalog\controller\checkout\checkout.php

@@ -1,93 +1,3 @@
-$('.reviews-carousel').owlCarousel({
-    loop: true,
-    nav: true,
-    dots: false,
-    autoplay: false,
-    mouseDrag: false,
-    items: 2,
-    responsive: {
-        0: {
-            items: 1
-        },
-        480: {
-            items: 2
-        }
-    }
-});
-
-function futureDate() {
-    var dateSpan = $('.js-future-date'),
-        futureDate = new Date(),
-        options = {
-            month: 'long',
-            day: 'numeric'
-        };
-    futureDate.setDate(futureDate.getDate() + 2);
-    futureDate = futureDate.toLocaleString("ru", options);
-    dateSpan.html(futureDate + '!').css('display', 'inline-block');
-}
-
-/*function sortAsc() {
-    var $container = $('.js-sortable'),
-        $products = $container.find('.js-product-item');
-
-    $products.sort(function (a, b) {
-        var an = $(a).attr('data-price'),
-            bn = $(b).attr('data-price');
-        if (an && bn) {
-            return an.toUpperCase().localeCompare(bn.toUpperCase());
-        }
-        return 0;
-    });
-    $products.detach().appendTo($container);
-}
-
-function sortDesc() {
-    var $container = $('.js-sortable'),
-        $products = $container.find('.js-product-item'),
-        $banner = $container.find('.banner-content');
-
-    $products.sort(function (a, b) {
-        var an = $(a).attr('data-price'),
-            bn = $(b).attr('data-price');
-        if (an && bn) {
-            return bn.toUpperCase().localeCompare(an.toUpperCase());
-        }
-        return 0;
-    });
-    $products.detach().appendTo($container);
-    $banner.remove();
-}
-
-$('.js-sort').change(function () {
-    var $option = $("select option:selected");
-    if ($option.hasClass('js-sort-asc'))
-        sortAsc();
-    if ($option.hasClass('js-sort-desc'))
-        sortDesc();
-});*/
-
-
-function scrollToTop() {
-    var scrollButton = $('.js-scroll-top');
-    scrollButton.hide();
-
-    $(document).ready(function () {
-        $(window).scroll(function () {
-            if ($(window).scrollTop() > 700) {
-                scrollButton.fadeIn("slow");
-            } else {
-                scrollButton.fadeOut("slow");
-            }
-        })
-    });
-
-    scrollButton.click(function () {
-        $("html, body").animate({scrollTop: 0}, "slow");
-        return false;
-    });
-}
-
 function validatePhone(phoneNumber) {
     var phoneNumberPattern = /((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{8,10}/;
     return phoneNumberPattern.test(phoneNumber);
@@ -125,8 +35,6 @@ $(document).on('click', '.js-btn-buy', function (e) {
         };
 
     $(this).closest('form').find('.js-btn-loading span').html('загрузка...');
-    if ($(this).hasClass('js-size-label'))
-        $(this).find('input.js-size').prop('checked', true);
     $('#input-phone').css('border', 'none');
 
     $.each($form.serializeArray(), function (key, input) {
@@ -147,14 +55,7 @@ $(document).on('click', '.js-btn-buy', function (e) {
                 preload = false;
                 totalPrice();
                 if (preload === false) {
-                    $('.js-btn-loading').find('span').html('купить сейчас');
-                    $.magnificPopup.open({
-                        items: {
-                            src: '#cartModal'
-                        }
-                    });
-                    if ($('.link-basket').hasClass('hidden'))
-                        $('.link-basket').removeClass('hidden');
+                    $('.js-btn-loading').find('span').html('В корзину');
                     productOptions();
                 }
                 var itemsCount = $('#cartModal').find('.js-prod-cart-item').length;
@@ -724,10 +625,8 @@ $(function () {
 categoryTitle();
 
 //Кнопка скролла наверх
-scrollToTop();
 
 //Расчёт даты до окончания акции (+n дней к текущей)
-futureDate();
 
 //Скрытие фильтров, кроме активного
 filterCheckedItems();

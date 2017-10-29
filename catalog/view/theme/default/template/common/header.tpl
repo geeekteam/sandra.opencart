@@ -14,8 +14,6 @@
     <title><?php echo $title; ?></title>
 </head>
 
-
-
 <link href="/catalog/view/theme/default/stylesheet/vendor.css" rel="stylesheet">
 <link href="/catalog/view/theme/default/stylesheet/common.css" rel="stylesheet">
 
@@ -87,6 +85,10 @@
                     <li class="main-menu__item"><a class="main-menu__item-link" href="#">Миниатюрный парфюм</a></li>
                     <li class="main-menu__item"><a class="main-menu__item-link" href="#">Нишевый парфюм</a></li>
                 </ul>
+            </div>
+            <div class="basket js-open-popup" data-popup-target="cart">
+                <img src="images/icon-cart.svg" alt="" class="basket__icon svg svg_white">
+                <span class="fw-fz-14 fw-color-white">(<span class="js-basket-count-products">1</span>)</span>
             </div>
         </div>
 
