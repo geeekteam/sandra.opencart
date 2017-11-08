@@ -9,18 +9,20 @@ $discount_price = intval(str_replace(',', '', $special_price));
 $old_price = intval($default_price);
 
 $i=0;
+
 foreach($options as $option):
-    if($option['name'] == 'Объём'):
-        foreach ($option['product_option_value'] as $options):
-            $volumes[$i] = $options;
-            $i++;
+    if ($option['option_id'] == 14) :
+        asort($option['product_option_value']);
+        $product_option_id = $option['product_option_id'];
+        foreach($option['product_option_value'] as $key => $optionValue) :
+            $volume_array[$key] = [
+                'volume_value' => $optionValue['product_option_value_id'],
+                'volume_name' => $optionValue['name'],
+                'volume_price' => intval(str_replace(' ', '',(str_replace('.0000', '', $optionValue['price']))))
+            ];
         endforeach;
     endif;
 endforeach;
-
-if (count($volumes) > 0) :
-    asort($volumes);
-endif;
 
 echo $header;
 ?>
@@ -98,39 +100,36 @@ echo $header;
                     </div>
                 </div>
                 <div class="product-buying-wrapper">
-                    <p class="product__stock-date">Акция действует до 01.12</p>
-                    <div class="product__stock-count">
-                        <div class="icon-check">
-                            <img class="icon-check__icon svg svg_green" src="../images/icon-check.svg" alt="">
-                        </div>
-                        <span>Осталось 13 штук по акции</span>
-                    </div>
-                    <?php if (count($volumes)>0) : ?>
-                    <div class="product__buying product-buying">
-                        <div class="product-buying__name"><?=$heading_title; ?></div>
-
-                        <?php foreach($volumes as $volume): ?>
-                            <?php $volume_price = str_replace(' ', '', str_replace(('.00 р.'), '', $volume['price'])); ?>
-                            <div class="product-buying__option">
-                                <div class="product-buying__option-name">
-                                    <span class="fw-font-bold fw-color-orange"><?=($volume_price); ?> тг.</span>
-                                    <span class="fw-fz-14">Объём: <?=$volume['name']; ?></span>
-                                </div>
-                                <div class="product-buying__option-count">
-                                    <div class="fw-flex jqs-product-count">
-                                        <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                        <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
-                                        <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                    <?php if (count($volume_array)>0) : ?>
+                        <div class="product__buying product-buying">
+                            <div class="product-buying__name"><?=$heading_title; ?></div>
+                            <?php foreach($volume_array as $volume): ?>
+                                <?php $volume_price = str_replace(' ', '', str_replace(('.00 р.'), '', $volume['volume_price'])); ?>
+                                <div class="product-buying__option js-product-buying-option">
+                                    <div class="product-buying__option-name">
+                                        <span class="fw-font-bold fw-color-orange"><?=$volume['volume_price']; ?> тг.</span>
+                                        <span class="fw-fz-14">Объём: <?=$volume['volume_name']; ?></span>
                                     </div>
-                                    <span class="fw-color-white fw-fz-14">В наличии</span>
+                                    <div class="product-buying__option-count">
+                                        <div class="fw-flex jqs-product-count">
+                                            <span class="product-buying__count-minus jqs-product-count-minus">-</span>
+                                            <input class="product-buying__count js-item-count" value="1" type="text" placeholder="1">
+                                            <span class="product-buying__count-plus jqs-product-count-plus">+</span>
+                                        </div>
+                                        <span class="fw-color-white fw-fz-14">В наличии</span>
+                                    </div>
+                                    <label class="btn btn__in-cart js-open-popup js-btn-buy js-btn-loading" data-popup-target="cart">
+                                        <input type="radio"
+                                               class="js-select-volume display-none"
+                                               name="<?=$product_option_id;?>"
+                                               data-volume-price="<?php echo $volume['volume_price'] ?>"
+                                               value="<?=$volume['volume_value']?>">
+                                        <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
+                                        <span>В корзину</span>
+                                    </label>
                                 </div>
-                                <div class="btn btn__in-cart">
-                                    <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                    <span>В корзину</span>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                            <?php endforeach; ?>
+                        </div>
                     <?php else: ?>
                         <div class="product__buying product-buying top-product__buying_without-volume">
                             <div class="product-buying__name"><?=$heading_title; ?></div>
@@ -141,11 +140,11 @@ echo $header;
                                 <div class="product-buying__option-count">
                                     <div class="fw-flex jqs-product-count">
                                         <span class="product-buying__count-minus jqs-product-count-minus">-</span>
-                                        <input class="product-buying__count jqs-product-count-input" value="0" type="text" placeholder="0">
+                                        <input class="product-buying__count js-item-count" value="1" type="text" placeholder="1">
                                         <span class="product-buying__count-plus jqs-product-count-plus">+</span>
                                     </div>
                                 </div>
-                                <div class="btn btn__in-cart">
+                                <div class="btn btn__in-cart js-open-popup js-btn-buy js-btn-loading" data-popup-target="cart">
                                     <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt=""></div>
                                     <span>В корзину</span>
                                 </div>
@@ -194,250 +193,129 @@ echo $header;
                     <a class="fw-ml-25@m fw-ml-0@xs fw-mt-0@m fw-mt-15@xs fw-color-orange fw-text-lowercase fw-fz-18@m fw-fz-14@xs fw-link-without-underline" href="#">смотреть все</a>
                 </div>
                 <div class="owl-reviews-slider owl-carousel">
-
-                    <div class="owl-reviews-slider__item reviews-item">
-                        <div class="reviews-item__text-wrapper">
-                            <div class="reviews-item__text">
-                                <p class="fw-mt-0 fw-mb-20 fw-font-bold fw-fz-18">Лучший интернет-магазин парфюма!</p>
-                                <p class="fw-mt-0 fw-mb-0 fw-fz-16">Интернет магазин парфюмерии Sandra.kz предлагает вам широчайший ассортимент высококачественной продукции ведущих мировых брендов по самым приемлемым ценам!</p>
+                    <?php $i = 0; shuffle($custom_reviews['text']); foreach ($custom_reviews['text'] as $review): ?>
+                        <div class="owl-reviews-slider__item reviews-item">
+                            <div class="reviews-item__text-wrapper">
+                                <div class="reviews-item__text">
+                                    <p class="fw-mt-0 fw-mb-20 fw-font-bold fw-fz-18">Лучший интернет-магазин парфюма!</p>
+                                    <p class="fw-mt-0 fw-mb-0 fw-fz-16"><?=htmlspecialchars_decode($review['description']);?></p>
+                                </div>
+                            </div>
+                            <div class="reviews-item__user-info">
+                                <div class="reviews-item__image-wrapper">
+                                    <img src="/image/<?=$review['image'];?>" alt="" class="reviews-item__image">
+                                </div>
+                                <p class="reviews-item__user-name"><?=$review['name'];?></p>
                             </div>
                         </div>
-                        <div class="reviews-item__user-info">
-                            <div class="reviews-item__image-wrapper">
-                                <img src="images/review-user.jpg" alt="" class="reviews-item__image">
-                            </div>
-                            <p class="reviews-item__user-name">Виктория, 25 лет, Алматы</p>
-                        </div>
-                    </div>
-
-                    <div class="owl-reviews-slider__item reviews-item">
-                        <div class="reviews-item__text-wrapper">
-                            <div class="reviews-item__text">
-                                <p class="fw-mt-0 fw-mb-20 fw-font-bold fw-fz-18">Спасибо за консультацию</p>
-                                <p class="fw-mt-0 fw-mb-0 fw-fz-16">Осуществляя продажу парфюмерии, наши сотрудники прикладывают максимум усилий для того, чтобы обслуживание было максимально удобным для клиентов. После продажи женской парфюмерии в Алматы или мужского парфюма, мы доставляем Ваш заказ точно в оговоренные сроки по адресу, указанному Вами. Мы высоко ценим доверие каждого своего клиента.</p>
-                            </div>
-                        </div>
-                        <div class="reviews-item__user-info">
-                            <div class="reviews-item__image-wrapper">
-                                <img src="images/review-user.jpg" alt="" class="reviews-item__image">
-                            </div>
-                            <p class="reviews-item__user-name">Виктория, 25 лет, Алматы</p>
-                        </div>
-                    </div>
-
-                    <div class="owl-reviews-slider__item reviews-item">
-                        <div class="reviews-item__text-wrapper">
-                            <div class="reviews-item__text">
-                                <p class="fw-mt-0 fw-mb-20 fw-font-bold fw-fz-18">Лучший интернет-магазин парфюма!</p>
-                                <p class="fw-mt-0 fw-mb-0 fw-fz-16">Интернет магазин парфюмерии Sandra.kz предлагает вам широчайший ассортимент высококачественной продукции ведущих мировых брендов по самым приемлемым ценам!</p>
-                            </div>
-                        </div>
-                        <div class="reviews-item__user-info">
-                            <div class="reviews-item__image-wrapper">
-                                <img src="images/review-user.jpg" alt="" class="reviews-item__image">
-                            </div>
-                            <p class="reviews-item__user-name">Виктория, 25 лет, Алматы</p>
-                        </div>
-                    </div>
-
-                    <div class="owl-reviews-slider__item reviews-item">
-                        <div class="reviews-item__text-wrapper">
-                            <div class="reviews-item__text">
-                                <p class="fw-mt-0 fw-mb-20 fw-font-bold fw-fz-18">Спасибо за консультацию</p>
-                                <p class="fw-mt-0 fw-mb-0 fw-fz-16">Осуществляя продажу парфюмерии, наши сотрудники прикладывают максимум усилий для того, чтобы обслуживание было максимально удобным для клиентов. После продажи женской парфюмерии в Алматы или мужского парфюма, мы доставляем Ваш заказ точно в оговоренные сроки по адресу, указанному Вами. Мы высоко ценим доверие каждого своего клиента.</p>
-                            </div>
-                        </div>
-                        <div class="reviews-item__user-info">
-                            <div class="reviews-item__image-wrapper">
-                                <img src="images/review-user.jpg" alt="" class="reviews-item__image">
-                            </div>
-                            <p class="reviews-item__user-name">Виктория, 25 лет, Алматы</p>
-                        </div>
-                    </div>
-
+                        <?php $i++;  endforeach; ?>
                 </div>
             </div>
         </div>
 
+
+
         <div class="main-content__products product-list">
             <div class="container">
-                <div class="fw-mb-40 fw-flex fw-flex-bottom@m fw-flex-column@xs fw-flex-row@m fw-flex-top@xs">
-                    <h2 class="fw-fz-30@m fw-fz18@xs fw-text-uppercase fw-mt-0 fw-mb-0 fw-line-height-1">Вы смотрели</h2>
-                </div>
-                <div class="product-list-wrapper fw-pb-40">
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-1.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Amaltea</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-2.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Perfumed Set With Balsam</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-1.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Amaltea</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-2.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Perfumed Set With Balsam</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?=$column_left; ?>
                 <div class="fw-mb-40 fw-flex fw-flex-bottom@m fw-flex-column@xs fw-flex-row@m fw-flex-top@xs">
                     <h2 class="fw-fz-30@m fw-fz18@xs fw-text-uppercase fw-mt-0 fw-mb-0 fw-line-height-1">Похожие товары</h2>
                 </div>
                 <div class="product-list-wrapper">
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-1.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Amaltea</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
+                    <?php shuffle($products); ?>
+                    <?php $j=0; foreach ($products as $product): ?>
+                        <?php
+                        $options = $product['options'];
+                        $product_name = $product['name'];
+                        $product_price = intval(str_replace(' ', '',(str_replace('.00 р.', '', $product['price']))));
+                        if ($product['special']) {
+                            $product_special_price = intval(str_replace(' ', '' ,(str_replace('.00 р.', '', $product['special']))));
+                        };
+                        $discount = intval(100-($product_special_price * 100 / $product_price));
+                        $i=0;
+                        foreach ($product['options'] as $options) :
+                            if($options['name'] == 'Объём'):
+                                foreach ($options['product_option_value'] as $option):
+                                    $volumes[$i] = $option;
+                                    $i++;
+                                endforeach;
+                                asort($volumes);
+                            endif;
+                        endforeach;
+                        ?>
+                        <div class="product__wrapper">
+                            <form action="#" class="product js-product">
+                                <input type="hidden" name="product_id" value="<?=$product['product_id']; ?>">
+                                <a class="product__link" href="<?=$product['href'];?>">
+                                    <?php if ($product['special']) : ?>
+                                        <div class="product__discount"><?php echo $discount; ?>%</div>
+                                    <?php endif; ?>
+                                    <div class="product__image-wrapper">
+                                        <img class="product__image" src="<?=$product['thumb'];?>" alt="">
                                     </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-2.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Perfumed Set With Balsam</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
+                                    <div class="fw-fz-16 fw-text-center"><?=$product['name'];?></div>
+                                    <div class="product__price">
+                                        <div class="fw-fz-14">
+                                            <?php if (count($volumes) > 0) : ?>
+                                                <?php foreach($product['options'] as $option): ?>
+                                                    <?php if ($option['option_id'] == 14): ?>
+                                                        <?php asort($option['product_option_value']); ?>
+                                                        <?php $i = 1; ?>
+                                                        <?php foreach($option['product_option_value'] as $volumes): ?>
+                                                            <?php if ($i == 1) : ?>
+                                                                <?php $volume_price = intval(str_replace(' ', '',(str_replace('.0000', '', $volumes['price'])))); ?>
+                                                                <span class="fw-fz-24 fw-color-orange fw-font-bold js-volume-price"><?php echo $volume_price ?></span> тг.
+                                                                <?php $i++; ?>
+                                                            <?php endif; ?>
+                                                        <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <?php if ($product['special']) : ?>
+                                                    <span class="fw-fz-24 fw-color-orange fw-font-bold"><?php echo $product_price ?></span> тг. /
+                                                    <span class="fw-fz-18 fw-font-bold fw-text-line-through"><?php echo $product_special_price ?></span>
+                                                <?php else : ?>
+                                                    <span class="fw-fz-24 fw-color-orange fw-font-bold"><?php echo $product_price ?></span> тг.
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
+                                </a>
+
+                                <?php foreach($product['options'] as $option): ?>
+                                    <?php if ($option['option_id'] == 14): ?>
+                                        <ul class="product__options">
+                                            <?php asort($option['product_option_value']); $i = 1; foreach($option['product_option_value'] as $volumes): ?>
+                                                <?php $volume_price = intval(str_replace(' ', '',(str_replace('.0000', '', $volumes['price'])))); ?>
+                                                <li class="product__options-item">
+                                                    <label class="product__options-item-radio">
+                                                        <input
+                                                            <?php if ($i == 1) : ?>
+                                                                checked
+                                                                <?php $i++; endif; ?>
+                                                                id="volume-<?=$i;?>"
+                                                                class="js-select-volume"
+                                                                type="radio"
+                                                                name="<?=$option['product_option_id']?>"
+                                                                value="<?=$volumes['product_option_value_id']?>"
+                                                                data-volume="<?php echo $volumes['name']; ?>"
+                                                                data-volume-price="<?=$volume_price;?>"
+                                                        >
+                                                        <span><?=($volumes['name']);?></span>
+                                                    </label>
+                                                </li>
+                                                <?php $i++; endforeach;?>
+                                        </ul>
+                                    <?php endif;?>
+                                <?php endforeach;?>
+
+                                <div class="product__button btn btn__in-cart js-open-popup js-btn-buy js-btn-loading" data-popup-target="cart">
+                                    <div class="main-banner-icon-cart"><img class="icon-cart svg svg_white" src="../images/icon-cart.svg" alt="В корзину"></div>
+                                    <span>В корзину</span>
                                 </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
+                            </form>
                         </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-1.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Amaltea</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product__wrapper">
-                        <div class="product">
-                            <a class="product__link" href="#">
-                                <div class="product__discount">10%</div>
-                                <div class="product__image-wrapper">
-                                    <img class="product__image" src="images/product-2.png" alt="">
-                                </div>
-                                <div class="fw-fz-16 fw-text-center">Perfumed Set With Balsam</div>
-                                <div class="product__price">
-                                    <div class="fw-fz-14">
-                                        <span class="fw-fz-24 fw-color-orange fw-font-bold">3500</span> руб. /
-                                        <span class="fw-fz-18 fw-font-bold fw-text-line-through">3850</span>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="product__button btn btn__in-cart">
-                                <div class="fw-mr-7"><i class="icon-cart-white"></i></div>
-                                <span>В корзину</span>
-                            </div>
-                        </div>
-                    </div>
+                    <?php $j++; if ($j>7) break; endforeach; ?>
                 </div>
             </div>
         </div>
