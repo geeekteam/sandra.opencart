@@ -452,9 +452,9 @@ class ControllerCheckoutConfirm extends Controller {
             $product_db_quantity = $this->model_catalog_product->getProduct($product['product_id'])['quantity'];
 
             $product_db_quantity = $product_db_quantity - $product['product_quantity'];
-            if ($product_db_quantity <= 0) {
-                $product_db_quantity = 19;
-            }
+//            if ($product_db_quantity <= 0) {
+//                $product_db_quantity = 19;
+//            }
             $new_product_data[] = array(
                 'product_id' => $product['product_id'],
                 'quantity' => $product_db_quantity,

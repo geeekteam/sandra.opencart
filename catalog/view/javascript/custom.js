@@ -3,7 +3,7 @@ function validatePhone(phoneNumber) {
     return phoneNumberPattern.test(phoneNumber);
 }
 
-var $sendForm = $('.js-send-form'),
+/*var $sendForm = $('.js-send-form'),
     $thanks = $('.js-thanks'),
     $thanksModal = $('.thanks-modal'),
     $closeThanksBtn = $('.js-close-thanks');
@@ -11,7 +11,7 @@ var $sendForm = $('.js-send-form'),
 $closeThanksBtn.click(function () {
     $thanks.removeClass('active');
     $sendForm.removeClass('hidden');
-});
+});*/
 
 var getCartAddedNewProduct = function ($product_id, callback) {
     $.post('/?route=checkout/checkout/single', {product_id: $product_id}, function (response) {
@@ -25,21 +25,24 @@ var $basketCountProducts = $('.js-basket-count-products'),
 $basketCountProducts.html(productsCountInCart);
 
 $(document).on('click', '.js-btn-buy', function (e) {
-    var time = performance.now();
-    var preload = true;
     e.preventDefault();
-    var $buyBtn = $(this),
+    var time = performance.now(),
+        preload = true,
+        $buyBtn = $(this),
         $form = $buyBtn.closest('form'),
         data = {
             option: {}
         };
+
     $(this).closest('form').find('.js-btn-loading span').html('загрузка...');
+
     $('#input-phone').css('border', 'none');
 
     if ($(this).find('.js-select-volume').length > 0) {
         var volumeValue = parseInt($(this).find('.js-select-volume').val());
         $(this).find('.js-select-volume').attr('checked', true);
     }
+
     if ($(this).closest('form').find('.js-item-count').length > 0) {
         var productCount = parseInt($(this).closest('.js-product-buying-option').find('.js-item-count').val());
     }
@@ -60,9 +63,11 @@ $(document).on('click', '.js-btn-buy', function (e) {
                 jcf.replaceAll();
                 time = performance.now() - time;
                 preload = false;
-                totalPrice();
+
                 if (preload === false) {
                     $('.js-btn-loading').find('span').html('В корзину');
+                    cartOpening();
+                    totalPrice();
                 }
                 var itemsCount = $('#cartModal').find('.js-prod-cart-item').length;
                 var $productsCountInCart = $('.jqs-send-form').find('.js-prod-cart-item');
@@ -241,6 +246,8 @@ function productVolume() {
         inputVolume.val(currentVolume);
     });
 }
+
+productVolume();
 
 // Расчёт полной стоимости заказа и стоимости отдельных товаров в зависимости от их количества
 function totalPrice() {
@@ -601,36 +608,49 @@ $(function () {
 
 });
 
-function selectVolume() {
-    var $volumeInput = $('.js-select-volume');
 
-    $volumeInput.on('click', function () {
-        $volumeInput.each(function () {
-            $volumeInput.attr('checked', false)
-        });
-        $(this).attr('checked', true);
-        var $currentProduct = $(this).closest('.js-product'),
-            $volumePrice = $currentProduct.find('.js-volume-price');
 
-        $volumePrice.html($(this).attr('data-volume-price'));
-
+$(document).on('click', '.js-select-volume', function () {
+    var $volumeInput = $(this);
+    $volumeInput.each(function () {
+        $volumeInput.attr('checked', false)
     });
-}
+    $volumeInput.attr('checked', true);
+    var $currentProduct = $volumeInput.closest('.js-product'),
+        $volumePrice = $currentProduct.find('.js-volume-price');
 
-function selectVolumeInCart() {
-    var $volumeSelect = $('.js-select-volume');
+    $volumePrice.html($(this).attr('data-volume-price'));
 
-    $volumeSelect.on('change', function () {
-        var $itemPrice = $(this).closest('.js-prod-cart-item').find('.js-item-price'),
-            $hiddenItemPrice = $(this).closest('.js-prod-cart-item').find('.js-hidden-input-item-price'),
-            volumePrice = parseInt($(this).find('option:selected').attr('data-volume-price')),
-            productCount = parseInt($(this).closest('.js-prod-cart-item').find('.js-item-count').val());
-        $itemPrice.html(productCount*volumePrice);
-        console.log($hiddenItemPrice);
-        $hiddenItemPrice.val(volumePrice);
-        totalPrice();
-    })
-}
+});
+
+
+$(document).on('change', '.js-select-volume', function () {
+    console.log($(this));
+    var $volumeSelect = $(this),
+        $itemPrice = $volumeSelect.closest('.js-prod-cart-item').find('.js-item-price'),
+        $hiddenItemPrice = $volumeSelect.closest('.js-prod-cart-item').find('.js-hidden-input-item-price'),
+        volumePrice = parseInt($volumeSelect.find('option:selected').attr('data-volume-price')),
+        productCount = parseInt($volumeSelect.closest('.js-prod-cart-item').find('.js-item-count').val());
+    $itemPrice.html(productCount*volumePrice);
+    $hiddenItemPrice.val(volumePrice);
+    totalPrice();
+});
+
+function cartOpening() {
+    var $cart = $('.cart');
+    if ($cart.closest('.popup-wrapper').hasClass('opened')) {
+        var $selectedVolume = $cart.find('.js-select-volume');
+
+        $selectedVolume.each(function () {
+            var volumePrice = parseInt($(this).find('option:selected').attr('data-volume-price')),
+                count = parseInt($(this).closest('.js-prod-cart-item').find('.js-item-count').val()),
+                $price = $(this).closest('.js-prod-cart-item').find('.js-item-price'),
+                productPrice = volumePrice*count;
+            $price.html(productPrice);
+        });
+        // console.log(selectedVolume);
+    }
+};
 
 //Изменение тайтла категории при применении фильтров
 categoryTitle();
@@ -641,7 +661,3 @@ categoryTitle();
 
 //Скрытие фильтров, кроме активного
 filterCheckedItems();
-
-selectVolume();
-
-selectVolumeInCart();
