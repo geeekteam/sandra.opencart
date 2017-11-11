@@ -74,7 +74,9 @@ echo $header;
                                 $product_price = str_replace(' ', ',',(str_replace('.00 р.', '', $product['price'])));
                                 if ($product['special']) {
                                     $product_special_price = str_replace(' ', ',' ,(str_replace('.00 р.', '', $product['special'])));
-                                };?>
+                                };
+                                $discount = intval(($product_special_price * 100 / $product_price));
+                            ?>
                                 <?php if($product['special']): ?>
                                     <div class="product__wrapper" data-price="<?=$product['special'];?>">
                                 <?php else: ?>
@@ -82,7 +84,9 @@ echo $header;
                                 <?php endif; ?>
                                     <form action="#" class="product">
                                         <a class="product__link" href="<?=$product['href'];?>">
-                                            <div class="product__discount"><?=$product_price;?></div>
+                                            <?php if ($discount > 0): ?>
+                                                <div class="product__discount"><?=100-$discount;?>%</div>
+                                            <?php endif; ?>
                                             <div class="product__image-wrapper">
                                                 <img class="product__image" src="<?=$product['thumb'];?>" alt="<?=$product['name'];?>">
                                             </div>

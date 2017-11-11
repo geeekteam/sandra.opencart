@@ -84,7 +84,8 @@ class ControllerExtensionModuleFilter extends Controller {
                             'filter_product_id' => $this->model_catalog_product->getAllProductFilters($filter['filter_id']),
                             'products'  => $products,
 							'filter_id' => $filter['filter_id'],
-							'name'      => $filter['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : '')
+							'name'      => $filter['name'] . ($this->config->get('config_product_count') ? ' (' . $this->model_catalog_product->getTotalProducts($filter_data) . ')' : ''),
+                            'products_count' => $this->model_catalog_product->getTotalProducts($filter_data)
 						);
 					}
 
