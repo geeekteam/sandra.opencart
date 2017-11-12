@@ -6347,3 +6347,7 @@ a.t-col-2:hover {
 .owl-slider-thumb-wrapp {
   z-index: 0;
 }
+
+.filter-list__item > label > input:checked + .filter-list__item-link {
+  text-decoration: underline;
+}

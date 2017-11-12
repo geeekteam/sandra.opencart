@@ -26,9 +26,11 @@ echo $header;
                                         </a>
                                     </li>
                                 <?php else : ?>
-                                    <a class="catalog-categories__item-link" href="<?=$category['category_href'];?>">
-                                        <?=$category['category_name']; ?>
-                                    </a>
+                                    <li class="catalog-categories__item">
+                                        <a class="catalog-categories__item-link" href="<?=$category['category_href'];?>">
+                                            <?=$category['category_name']; ?>
+                                        </a>
+                                    </li>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </ul>
@@ -52,7 +54,7 @@ echo $header;
                         <?=$description;?>
                     </div>
                     <div class="catalog__info">
-                        <span class="catalog__info-count">16 товаров</span>
+                        <span class="catalog__info-count"><?=count($products);?> товаров</span>
                         <span class="catalog__info-sort">Сортировка:</span>
                         <div class="catalog__info-sort-select">
                             <select onchange="location = this.value;">
