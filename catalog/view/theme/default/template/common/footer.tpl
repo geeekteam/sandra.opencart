@@ -106,7 +106,7 @@
 <div class="popup-wrapper js-popup" data-popup="thanks">
     <div class="thanks-popup js-thanks">
         <span class="popup-close js-close-popup"></span>
-        <p class="fw-fz-32 fw-text-center">Спасибо за заказ!</p>
+        <p class="fw-fz-32 fw-text-center">Спасибо!</p>
         <p class="fw-fz-24 fw-text-center">Наш менеджер свяжется с вами в ближайшее время</p>
     </div>
 </div>

@@ -195,11 +195,11 @@
     </div>
 
     <div class="popup-wrapper js-popup" data-popup="feedback">
-        <form class="feedback">
+        <form class="feedback jqs-feedback-form">
             <span class="popup-close js-close-popup"></span>
             <p class="fw-mt-0 fw-mb-20 fw-fz-24">Обратный звонок</p>
-            <div class="feedback__row"><input class="feedback__input" type="text" placeholder="Ваше имя"></div>
-            <div class="feedback__row"><input class="feedback__input" type="text" placeholder="Ваш телефон"></div>
+            <div class="feedback__row"><input id="input-name" class="feedback__input" type="text" placeholder="Ваше имя"></div>
+            <div class="feedback__row"><input id="input-phone" class="feedback__input" type="text" placeholder="Ваш телефон"></div>
             <div class="feedback__row"><button class="feedback__btn btn">Оформить заказ</button></div>
         </form>
     </div>
@@ -218,11 +218,31 @@
                     </div>
                     <div class="header__shop-title">Интернет-магазин парфюма и косметики</div>
                     <ul class="fw-flex fw-flex-middle header-top-menu">
-                        <li class="header-top-menu__item"><a class="header-top-menu__item-link active" href="#">О нас</a></li>
-                        <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="#">Доставка и оплата</a></li>
-                        <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="#">Отзывы</a></li>
-                        <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="#">Возврат</a></li>
-                        <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="#">Контакты</a></li>
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'o-nas')): ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link active">О нас</a></li>
+                        <?php else: ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="/o-nas">О нас</a></li>
+                        <?php endif; ?>
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'dostavka-i-oplata')): ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link active">Доставка и оплата</a></li>
+                        <?php else: ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="/dostavka-i-oplata">Доставка и оплата</a></li>
+                        <?php endif; ?>
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'otzyvy')): ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link active">Отзывы</a></li>
+                        <?php else: ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="/otzyvy">Отзывы</a></li>
+                        <?php endif; ?>
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'vozvrat')): ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link active">Возврат</a></li>
+                        <?php else: ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="/vozvrat">Возврат</a></li>
+                        <?php endif; ?>
+                        <?php if (strpos($_SERVER['REQUEST_URI'], 'contacts')): ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link active">Контакты</a></li>
+                        <?php else: ?>
+                            <li class="header-top-menu__item"><a class="header-top-menu__item-link" href="/contacts">Контакты</a></li>
+                        <?php endif; ?>
                     </ul>
                     <div class="header-btn-wrapper">
                         <span class="header-btn js-open-popup" data-popup-target="feedback">Заказать звонок</span>
@@ -265,7 +285,7 @@
                     <li class="main-menu__item"><a class="main-menu__item-link" href="#">Нишевый парфюм</a></li>
                 </ul>
             </div>
-            <div class="basket js-open-popup js-basket" data-popup-target="cart">
+            <div class="basket js-open-popup js-basket hidden" data-popup-target="cart">
                 <img src="images/icon-cart.svg" alt="" class="basket__icon svg svg_white">
                 <span class="fw-fz-14 fw-color-white">(<span class="js-basket-count-products">1</span>)</span>
             </div>

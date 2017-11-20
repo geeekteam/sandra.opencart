@@ -6,34 +6,30 @@ echo $header;
 
 ?>
 
-<div id="middle">
-
-    <section class="section-inner">
-        <div class="container group">
-            <div class="aside hidden-devices">
+<div class="static-page">
+    <div class="container">
+        <div class="content-with-sidebar">
+            <div class="sidebar fw-mr-25">
                 <?=$column_left; ?>
             </div>
             <div class="content">
-                <ul class="bread-crumbs hidden-devices">
+                <ul class="breadcrumbs">
                     <?php $i = 0; foreach ($breadcrumbs as $breadcrumb): ?>
                         <?php if ($i == 0):?>
-                            <li><a href="/">Главная</a></li>
+                            <li class="breadcrumbs__item"><a class="breadcrumbs__item-link" href="/">Главная</a></li>
                         <?php elseif ($last_elem !== $breadcrumb): ?>
-                            <li><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
+                            <li class="breadcrumbs__item"><a class="breadcrumbs__item-link" href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a></li>
                         <?php elseif ($last_elem == $breadcrumb): ?>
-                            <li><?php echo $breadcrumb['text']; ?></li>
+                            <li class="breadcrumbs__item"><a class="breadcrumbs__item-link active"><?php echo $breadcrumb['text']; ?></a></li>
                         <?php endif;?>
                     <?php $i++; endforeach;?>
                 </ul>
                 <h1><?=$heading_title;?></h1>
-                <div class="mb30">
-                    <?php echo $description; ?>
-                </div>
+                <?=$description; ?>
                 <?=$content_bottom; ?>
             </div>
         </div>
-    </section>
-
+    </div>
 </div>
 
 

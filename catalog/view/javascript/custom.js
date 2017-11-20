@@ -23,6 +23,9 @@ var $basketCountProducts = $('.js-basket-count-products'),
     productsCountInCart = $('#cartModal').find('.js-prod-cart-item').length;
 
 $basketCountProducts.html(productsCountInCart);
+if (parseInt($basketCountProducts.html()) > 0) {
+    $('.js-basket').removeClass('hidden');
+}
 
 $(document).on('click', '.js-btn-buy', function (e) {
     e.preventDefault();
@@ -83,30 +86,6 @@ $(document).on('click', '.js-btn-buy', function (e) {
     $(this).find('.js-select-volume').attr('checked', false);
 });
 
-$(document).on('submit', '.jq-send-form', function (e) {
-    e.preventDefault();
-
-    var $form = $(this),
-        tempData = {},
-        data = [],
-        $phone = $form.find('#input-phone');
-
-    if (validatePhone($phone.val()) === true) {
-        $phone.css('border', 'none');
-        $.each($form.serializeArray(), function (key, input) {
-            tempData[input.name] = input.value;
-        });
-
-        data.push(tempData);
-        addOrder(data, function (response) {
-            console.log(response);
-        });
-
-    } else {
-        $phone.css('border', '1px solid red');
-    }
-});
-
 $(document).on('submit', '.jqs-send-form', function (e) {
     e.preventDefault();
     var $form = $(this),
@@ -133,8 +112,6 @@ $(document).on('submit', '.jqs-send-form', function (e) {
         addOrder(data, function (response) {
             console.log(response);
         });
-
-        console.log(data);
 
         quantityPerStock();
 
@@ -178,18 +155,11 @@ $(document).on('submit', '.jqs-feedback-form', function (e) {
             // console.log(response);
         });
 
-        $.magnificPopup.close({
-            items: {
-                src: '#feedback'
-            }
-        });
-        $.magnificPopup.open({
-            items: {
-                src: '#thanks'
-            }
-        });
-
         clearFeedbackForm();
+
+        $form.closest('.js-popup').removeClass('opened');
+        $('.js-thanks').closest('.js-popup').addClass('opened');
+
     } else {
         $phone.css('border', '1px solid red');
     }
@@ -293,7 +263,7 @@ function removeItem(item) {
                 }
             });
         }
-        // Удалить товар из списка и закрыть корзину, если товар единственный
+    // Удалить товар из списка и закрыть корзину, если товар единственный
     } else if (itemsCount === 1) {
         if (($count.val() < 1)) {
             if ($('.js-popup').hasClass('opened')) {
@@ -318,7 +288,7 @@ function removeItem(item) {
     }
 }
 
-//Пересчёт общей суммы и стомости товара при увеличении количества товаров
+//Пересчёт общей суммы и стомости товара при клике на плюс
 $(document).on('click', '.jqs-product-count-plus', function () {
     var $count = $(this).siblings('.js-item-count'),
         $item = $(this).closest('.js-prod-cart-item');
@@ -357,7 +327,6 @@ $(document).on('keypress', '.js-item-count', function (e) {
 
 $(document).on('focusout', '.js-item-count', function () {
     var $item = $(this).closest('.js-prod-cart-item');
-
     itemPrice($item);
     removeItem($item);
     totalPrice();
@@ -372,27 +341,27 @@ $(document).on('click', '.js-basket', function () {
 
 
 //Изменение итоговой стоимости, если выбрана доставка по России
-$(document).on('click', '.js-delivery-russian', function () {
-    var $form = $('#cartModal'),
-        $totalPriceSpan = $form.find('.js-total-price'),
-        $totalPriceInput = $form.find('.js-total-price-input');
-    $totalPriceSpan.html(parseInt($totalPriceInput.val()) + 390 + ' <span class="rubl"> </span>');
-});
+// $(document).on('click', '.js-delivery-russian', function () {
+//     var $form = $('#cartModal'),
+//         $totalPriceSpan = $form.find('.js-total-price'),
+//         $totalPriceInput = $form.find('.js-total-price-input');
+//     $totalPriceSpan.html(parseInt($totalPriceInput.val()) + 390 + ' <span class="rubl"> </span>');
+// });
 
 // Сохранение прежней стоимости, если доставка по России не выбрана
-$(document).on('click', '.js-delivery-default', function () {
-    var $form = $('#cartModal'),
-        $totalPriceSpan = $form.find('.js-total-price'),
-        $totalPriceInput = $form.find('.js-total-price-input').val();
-    $totalPriceSpan.html($totalPriceInput + ' <span class="rubl"> </span>');
-});
+// $(document).on('click', '.js-delivery-default', function () {
+//     var $form = $('#cartModal'),
+//         $totalPriceSpan = $form.find('.js-total-price'),
+//         $totalPriceInput = $form.find('.js-total-price-input').val();
+//     $totalPriceSpan.html($totalPriceInput + ' <span class="rubl"> </span>');
+// });
 
 //Cкрытие всех фильтров, кроме активного, появление кнопки "Все"
 function filterCheckedItems() {
-    var $filters = $('.filter-aside-cont');
+    var $filters = $('.filter');
     $filters.each(function () {
         var $allButton = $(this).find('.js-all-filters'),
-            $inputs = $(this).find('.filter-item input');
+            $inputs = $(this).find('input');
         if ($inputs.filter(":checked").length > 0) {
             $inputs.not(":checked").closest('.filter-item').addClass('hidden');
             $allButton.removeClass('hidden');
@@ -401,214 +370,143 @@ function filterCheckedItems() {
 }
 
 //Изменение тайтла категории при применении фильтров
-function categoryTitle() {
-    var $categoryTitleSpan = $('.js-category-title'),
-        categoryTitle = $categoryTitleSpan.html(),
-        $filters = $('.filter-aside-cont'),
-        $inputsChecked = $filters.find('input:checked'),
-        arr = [];
-    $inputsChecked.each(function () {
-        var filterName = $(this).closest('.filter-item').find('.js-filter-name').attr('data-filter-name');
-        filterName = filterName.replace(/\s/g, '');
-        arr.push(filterName);
+// function categoryTitle() {
+//     var $categoryTitleSpan = $('.js-category-title'),
+//         categoryTitle = $categoryTitleSpan.html(),
+//         $filters = $('.filter'),
+//         $inputsChecked = $filters.find('input:checked'),
+//         arr = [];
+//     $inputsChecked.each(function () {
+//         var filterName = $(this).closest('.filter-item').find('.js-filter-name').attr('data-filter-name');
+//         filterName = filterName.replace(/\s/g, '');
+//         arr.push(filterName);
+//
+//     });
+//     if (arr.length > 0) {
+//         $categoryTitleSpan.html(categoryTitle + ', ' + arr.join(', '));
+//         document.title = categoryTitle + ', ' + arr.join(', ');
+//     }
+// }
 
-    });
-    if (arr.length > 0) {
-        $categoryTitleSpan.html(categoryTitle + ', ' + arr.join(', '));
-        document.title = categoryTitle + ', ' + arr.join(', ');
-    }
-}
-
-Object.extend = function (destination, source) {
-    for (var property in source) {
-        if (source.hasOwnProperty(property)) {
-            destination[property] = source[property];
-        }
-    }
-    return destination;
-};
-
-function quantityPerStock() {
-    var $form = $('.jqs-send-form'),
-        $items = $form.find('.js-prod-cart-item');
-    var data = [];
-
-    if (localStorage.getItem('product_info') !== null) {
-        var oldStorage = JSON.parse(localStorage.getItem('product_info'));
-    }
-
-    //Помещаем отправленные в корзину продукты и их количество в массив
-    $items.each(function () {
-        var products_id = $(this).find('.js-product-id').val(),
-            products_quantity = $(this).find('.js-hidden-input-product-quantity').val(),
-            product_quantity_in_cart = $(this).find('.js-item-count').val(),
-
-            quantityDifference = parseInt(products_quantity) - parseInt(product_quantity_in_cart);
-        if (parseInt(quantityDifference) <= 0)
-            quantityDifference = 0;
-        data.push({
-            product_id: parseInt(products_id),
-            quantity: parseInt(quantityDifference)
-        });
-    });
-    // массив помещаем в localStorage
-
-    if (localStorage.getItem('product_info') !== null) {
-        var currentStorage = oldStorage.concat(data);
-        localStorage.setItem('product_info', JSON.stringify(currentStorage));
-    } else {
-        localStorage.setItem('product_info', JSON.stringify(data));
-    }
-}
-
-// присваиваем данные из localStorage переменной
-var productInStorage = JSON.parse(localStorage.getItem('product_info'));
-
-
-// сравниваем ID купленных пользователем товаров с товаром, на страницу которого пользователь зашёл
-function checkProductQuantity() {
-    var $quantity = $('.js-quantity-in-product');
-    var product_id_in_form = $('form').find('input[name=product_id]').val();
-    // перебираем массив в localStorage, пытаясь найти среди купленных товар, на странице которого находимся
-    $.each(productInStorage, function (index, value) {
-
-        // если такой товар найден и разница между остатком и количеством купленных пользователем товаров меньше или равна нуля, то показываем 0
-        if (parseInt(value.product_id) === parseInt(product_id_in_form) && (parseInt(value.quantity) === 0)) {
-            $quantity.html(0);
-            return false;
-        } else {
-            $quantity.html(quantityInProductReal);
-        }
-    });
-}
-
-//Выполняем функцию, если в массиве что-то есть
-var $quantityInProductSpan = $('.js-quantity-in-product'),
-    quantityInProductReal = $('.js-quantity-in-product-real').val();
-if (productInStorage && productInStorage.length > 0) {
-    checkProductQuantity();
-} else {
-    $quantityInProductSpan.html(quantityInProductReal);
-}
+// Object.extend = function (destination, source) {
+//     for (var property in source) {
+//         if (source.hasOwnProperty(property)) {
+//             destination[property] = source[property];
+//         }
+//     }
+//     return destination;
+// };
 
 //Поиск
-
-$('.search-inp input').on('keydown', function () {
-
-    if (!$(this).val()) {
-        $('.search-result').hide();
-        return;
-    }
-
-    var data = {
-        search: $(this).val()
-    };
-    $.ajax({
-        url: 'index.php?route=common/ajax_search',
-        data: data,
-        type: 'post',
-        dataType: 'json',
-        success: function (json) {
-            if (!json.products) {
-                return;
-            }
-
-            var inner = $('.search-result .search-result-inner');
-            var template = $('.search-result .search-result-inner .template').clone();
-            inner.html('');
-
-            inner.append(template);
-
-            json.products.forEach(function (product) {
-                var t = template.clone().removeClass('template');
-                t.find('a').attr('href', product.href);
-                t.find('img').attr('src', product.thumb);
-                t.find('span').html(product.name);
-                inner.append(t);
-            });
-
-            $('.search-result').show();
-
-        }
-    });
-});
+// $('.search-inp input').on('keydown', function () {
+//
+//     if (!$(this).val()) {
+//         $('.search-result').hide();
+//         return;
+//     }
+//
+//     var data = {
+//         search: $(this).val()
+//     };
+//     $.ajax({
+//         url: 'index.php?route=common/ajax_search',
+//         data: data,
+//         type: 'post',
+//         dataType: 'json',
+//         success: function (json) {
+//             if (!json.products) {
+//                 return;
+//             }
+//             var inner = $('.search-result .search-result-inner');
+//             var template = $('.search-result .search-result-inner .template').clone();
+//             inner.html('');
+//             inner.append(template);
+//             json.products.forEach(function (product) {
+//                 var t = template.clone().removeClass('template');
+//                 t.find('a').attr('href', product.href);
+//                 t.find('img').attr('src', product.thumb);
+//                 t.find('span').html(product.name);
+//                 inner.append(t);
+//             });
+//             $('.search-result').show();
+//         }
+//     });
+// });
 
 //Очистка поиска
-$('.search-close').on("click", function (e) {
-    $(this).siblings('input').val('');
-    $(this).closest('.search-form').removeClass('search-open');
-    $('.search-result').hide();
-});
+// $('.search-close').on("click", function (e) {
+//     $(this).siblings('input').val('');
+//     $(this).closest('.search-form').removeClass('search-open');
+//     $('.search-result').hide();
+// });
 
-var page = 1;
-var loadPage = false;
-
-$(function () {
-    var currentState = history.state;
-    for (const key in currentState) {
-        if (currentState[key] && currentState[key].contentProducts) {
-            $('.jqs-lazy-list-product[data-category="' + key + '"]').html('');
-            $('.jqs-lazy-list-product[data-category="' + key + '"]').append(currentState[key].contentProducts);
-            page = currentState[key].page;
-        }
-    }
-    var $showMore = $('.js-show-more');
-
-    if ($showMore.length) {
-
-        $showMore.each(function () {
-            var $newShowMore = $(this);
-            var maxPage = $newShowMore.data('max-page');
-            var url = $newShowMore.data('max-url');
-            var category = $newShowMore.data('category');
-
-
-            $(document).on('scroll', function () {
-                if (maxPage > page && $(this).scrollTop() >= $newShowMore.position().top - 700 && !loadPage) {
-                    loadPage = true;
-                    $('#fountainG').show();
-                    page++;
-
-                    $.ajax({
-                        url: url,
-                        data: {page: page},
-                        success: function (data) {
-                            $(data).find('.jqs-lazy-list-product[data-category="' + category + '"] .prod-item-wrapper[data-category="' + category + '"]').each(function () {
-                                $('.jqs-lazy-list-product[data-category="' + category + '"]').append(this);
-
-                            });
-
-                            var state = {};
-
-                            state[category] = {
-                                contentProducts: $('.jqs-lazy-list-product[data-category="' + category + '"]').html(),
-                                page: page
-                            };
-
-                            history.replaceState(state, location.href, location.href);
-
-                            loadPage = false;
-                            $('#fountainG').hide();
-                            console.log($(data).find('.jqs-lazy-list-product[data-category="' + category + '"] .prod-item-wrapper[data-category="' + category + '"]').each(function () {
-                                $('.jqs-lazy-list-product[data-category="' + category + '"]')}));
-                        }
-                    });
-
-                }
-            });
-        })
-    }
-
-    $('.goBack').on('click', function () {
-        if (history.length > 2) {
-            window.history.go(-1);
-            return false;
-        }
-    });
-
-});
-
-
+// var page = 1;
+// var loadPage = false;
+//
+// $(function () {
+//     var currentState = history.state;
+//     for (const key in currentState) {
+//         if (currentState[key] && currentState[key].contentProducts) {
+//             $('.jqs-lazy-list-product[data-category="' + key + '"]').html('');
+//             $('.jqs-lazy-list-product[data-category="' + key + '"]').append(currentState[key].contentProducts);
+//             page = currentState[key].page;
+//         }
+//     }
+//     var $showMore = $('.js-show-more');
+//
+//     if ($showMore.length) {
+//
+//         $showMore.each(function () {
+//             var $newShowMore = $(this);
+//             var maxPage = $newShowMore.data('max-page');
+//             var url = $newShowMore.data('max-url');
+//             var category = $newShowMore.data('category');
+//
+//
+//             $(document).on('scroll', function () {
+//                 if (maxPage > page && $(this).scrollTop() >= $newShowMore.position().top - 700 && !loadPage) {
+//                     loadPage = true;
+//                     $('#fountainG').show();
+//                     page++;
+//
+//                     $.ajax({
+//                         url: url,
+//                         data: {page: page},
+//                         success: function (data) {
+//                             $(data).find('.jqs-lazy-list-product[data-category="' + category + '"] .prod-item-wrapper[data-category="' + category + '"]').each(function () {
+//                                 $('.jqs-lazy-list-product[data-category="' + category + '"]').append(this);
+//
+//                             });
+//
+//                             var state = {};
+//
+//                             state[category] = {
+//                                 contentProducts: $('.jqs-lazy-list-product[data-category="' + category + '"]').html(),
+//                                 page: page
+//                             };
+//
+//                             history.replaceState(state, location.href, location.href);
+//
+//                             loadPage = false;
+//                             $('#fountainG').hide();
+//                             console.log($(data).find('.jqs-lazy-list-product[data-category="' + category + '"] .prod-item-wrapper[data-category="' + category + '"]').each(function () {
+//                                 $('.jqs-lazy-list-product[data-category="' + category + '"]')}));
+//                         }
+//                     });
+//
+//                 }
+//             });
+//         })
+//     }
+//
+//     $('.goBack').on('click', function () {
+//         if (history.length > 2) {
+//             window.history.go(-1);
+//             return false;
+//         }
+//     });
+//
+// });
 
 $(document).on('click', '.js-select-volume', function () {
     var $volumeInput = $(this);
@@ -623,9 +521,7 @@ $(document).on('click', '.js-select-volume', function () {
 
 });
 
-
 $(document).on('change', '.js-select-volume', function () {
-    console.log($(this));
     var $volumeSelect = $(this),
         $itemPrice = $volumeSelect.closest('.js-prod-cart-item').find('.js-item-price'),
         $hiddenItemPrice = $volumeSelect.closest('.js-prod-cart-item').find('.js-hidden-input-item-price'),
