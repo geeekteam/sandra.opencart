@@ -1,4 +1,8 @@
 <!-- Footer block -->
+<?php
+$protocol = strtolower(substr($_SERVER["SERVER_PROTOCOL"],0,strpos( $_SERVER["SERVER_PROTOCOL"],'/'))).'://';
+$actual_link = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+?>
 <footer class="footer">
     <div class="container">
         <div class="footer-grid">
@@ -11,73 +15,37 @@
             <div class="footer-grid__item fw-width-220 footer-grid-item fw-tablet-hidden">
                 <p class="fw-mt-0 fw-mb-7 fw-fz-18 fw-color-white fw-text-uppercase fw-font-bold">Категории</p>
                 <ul class="footer-list">
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Парфюмированные наборы</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Парфюм</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Миниатюрный парфюм</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Нишевый парфюм</a>
-                    </li>
+                    <?php foreach ($all_categories as $i => $category): ?>
+                        <?php if ($actual_link == $category['category_href']): ?>
+                            <li class="footer-list__item">
+                                <a class="footer-list__item-link active">
+                                    <?=$category['category_name']; ?>
+                                </a>
+                            </li>
+                        <?php else : ?>
+                            <li class="footer-list__item">
+                                <a class="footer-list__item-link" href="<?=$category['category_href'];?>">
+                                    <?=$category['category_name']; ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div class="footer-grid__item fw-width-210 footer-grid-item fw-tablet-hidden">
                 <p class="fw-mt-0 fw-mb-7 fw-fz-18 fw-color-white fw-text-uppercase fw-font-bold">Специальное предложение</p>
                 <ul class="footer-list">
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Акции</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Скидки</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Горячие предложения</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Товары месяца</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Хиты продаж</a>
-                    </li>
+                    <?php foreach($filter_groups[2]['filter'] as $filter): ?>
+                        <li class="footer-list__item"><a class="footer-list__item-link" href="/all&filter=<?php echo $filter['filter_id'];?>"><?php echo $filter['name']; ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div class="footer-grid__item fw-width-210 footer-grid-item fw-tablet-hidden">
                 <p class="fw-mt-0 fw-mb-7 fw-fz-18 fw-color-white fw-text-uppercase fw-font-bold">Бренд</p>
                 <ul class="footer-list">
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Abercrombie & Fitch</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">E. Coudray</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Florich</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Guess</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Jean Patou</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Nabucco</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Odin</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Playboy</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">Queen Latifa</a>
-                    </li>
-                    <li class="footer-list__item">
-                        <a href="#" class="footer-list__item-link">RUEHL</a>
-                    </li>
+                    <?php foreach($filter_groups[4]['filter'] as $filter): ?>
+                        <li class="footer-list__item"><a class="footer-list__item-link" href="/all&filter=<?php echo $filter['filter_id'];?>"><?php echo $filter['name']; ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
             <div class="footer-grid__item fw-flex-grow-1 footer-grid-item fw-mobile-hidden">
@@ -95,10 +63,13 @@
     <div class="mobile-menu">
         <span class="close-mobile-menu js-close-popup"></span>
         <ul class="mobile-menu__list">
-            <li class="mobile-menu__item"><a class="mobile-menu__item-link" href="#">Парфюмированные наборы</a></li>
-            <li class="mobile-menu__item"><a class="mobile-menu__item-link" href="#">Парфюм</a></li>
-            <li class="mobile-menu__item"><a class="mobile-menu__item-link" href="#">Миниатюрный парфюм</a></li>
-            <li class="mobile-menu__item"><a class="mobile-menu__item-link" href="#">Нишевый парфюм</a></li>
+            <?php foreach ($all_categories as $i => $category): ?>
+                <li class="mobile-menu__item">
+                    <a class="mobile-menu__item-link" href="<?=$category['category_href'];?>">
+                        <?=$category['category_name']; ?>
+                    </a>
+                </li>
+            <?php endforeach; ?>
         </ul>
     </div>
 </div>
